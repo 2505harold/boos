@@ -3,7 +3,6 @@ const ctrl = {};
 
 ctrl.upload = async (req, res) => {
   const data = req.body;
-  console.log(data);
   let key_old = [
     "Item",
     "N° de banco de ensayo",
