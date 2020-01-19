@@ -1,0 +1,11 @@
+.slide {
+  background: #4776e6;
+  background: url("../../../assets/image/bg-pattern.png") #4776e6;
+
+  height: 200px;
+  width: 100%;
+}
+
+.slide .container {
+  height: 100%;
+}

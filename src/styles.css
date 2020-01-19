@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@media (max-width: 1200px) {
+  .title-principal {
+    font-size: calc(2rem + 2.1vw);
+  }
+  .subtitule-principal {
+    font-size: calc(0.8rem + 2.1vw);
+  }
+}

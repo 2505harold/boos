@@ -1,0 +1,140 @@
+<app-slide [titulo]="tituloSlide" [subtitulo]="subtituloSlide"></app-slide>
+
+<section class="container mt-3">
+  <div class="form-group">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Ingrese codigo del medidor a buscar"
+      (paste)="buscar($event.clipboardData.getData('text/plain'))"
+      (keyup)="buscar(inputBuscar.value)"
+      #inputBuscar
+      autofocus
+    />
+  </div>
+</section>
+<section class="container">
+  <div class="row">
+    <div class="col-12 col-sm-6">
+      <div class="card">
+        <div class="card-header">
+          <h4>Datos Genericos</h4>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label>Codigo Medidor</label>
+            <input
+              type="input"
+              class="form-control"
+              [(ngModel)]="loteMedicion.codigo_medidor"
+            />
+          </div>
+          <div class="form-group">
+            <label>Codigo Prescinto</label>
+            <input
+              type="input"
+              class="form-control"
+              [(ngModel)]="loteMedicion.codigo_prescinto"
+              #inputCodigoPrescinto
+              (paste)="
+                guardarCodePrescinto($event.clipboardData.getData('text/plain'))
+              "
+            />
+          </div>
+          <div class="form-group">
+            <label>Numero de Certificado</label>
+            <input
+              type="input"
+              class="form-control"
+              [(ngModel)]="loteMedicion.certificado"
+            />
+          </div>
+          <div class="form-group">
+            <label>Fecha de Ejecucion</label>
+            <input
+              type="input"
+              class="form-control"
+              [(ngModel)]="loteMedicion.fecha_ejecucion"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6">
+      <div class="card">
+        <div class="card-header">
+          <h4>Datos de Medicion</h4>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label>Numero de Banco</label>
+            <input
+              type="input"
+              class="form-control"
+              [(ngModel)]="loteMedicion.nro_banco"
+            />
+          </div>
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Q3 (L/h)</label>
+                  <input
+                    type="input"
+                    class="form-control"
+                    [(ngModel)]="loteMedicion.q3"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Q2 (L/h)</label>
+                  <input
+                    type="input"
+                    class="form-control"
+                    [(ngModel)]="loteMedicion.q2"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Q1 (L/h)</label>
+                  <input
+                    type="input"
+                    class="form-control"
+                    [(ngModel)]="loteMedicion.q1"
+                  />
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Error Q3 (L/h)</label>
+                  <input
+                    type="input"
+                    class="form-control"
+                    [(ngModel)]="loteMedicion.error_q1"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Error Q2 (L/h)</label>
+                  <input
+                    type="input"
+                    class="form-control"
+                    [(ngModel)]="loteMedicion.error_q2"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Error Q1 (L/h)</label>
+                  <input
+                    type="input"
+                    class="form-control"
+                    [(ngModel)]="loteMedicion.error_q3"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="container">
+  <div class="row"></div>
+</section>

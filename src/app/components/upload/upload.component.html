@@ -1,0 +1,148 @@
+
+<app-slide
+  [titulo]="'Portal para subir y guardar datos de medicion'"
+  [subtitulo]="
+    'Asegurese de revisar los datos importados antes de proceder a guadarlos'
+  "
+></app-slide>
+
+<div class="container mt-3">
+  <div class="form-inline">
+    <div class="custom-file col-12 col-md-8">
+      <input
+        type="file"
+        class="custom-file-input"
+        aria-describedby="inputGroupFileAddon01"
+        (change)="onFileChange($event)"
+        #fileInput
+      />
+      <label class="custom-file-label" #lblFileInput
+        >Seleccione Archivo excel</label
+      >
+    </div>
+    <button class="btn btn-primary mx-1" (click)="guardar()">Guardar</button>
+  </div>
+  <div class="table-responsive">
+    <table
+      class="table"
+      mat-table
+      [dataSource]="dataSource"
+      class="mt-3"
+      matSort
+    >
+      <ng-container matColumnDef="Item">
+        <th mat-header-cell *matHeaderCellDef>Item</th>
+        <td mat-cell *matCellDef="let element">{{ element["Item"] }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="N° de banco de ensayo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          N° de banco de ensayo
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element["N° de banco de ensayo"] }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="# Medidor">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header># Medidor</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element["# Medidor"] }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Q3 (L/h)">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Q3 (L/h)</th>
+        <td mat-cell *matCellDef="let element">
+          {{ +element["Q3 (L/h)"] | number: "1.2-2" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Error Q3 (%)">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Error Q3 (%)</th>
+        <td mat-cell *matCellDef="let element">
+          {{ +element["Error Q3 (%)"] | number: "1.1-1" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Q2 (L/h)">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Q2 (L/h)</th>
+        <td mat-cell *matCellDef="let element">
+          {{ +element["Q2 (L/h)"] | number: "1.2-2" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Error Q2 (%)">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Error Q2 (%)</th>
+        <td mat-cell *matCellDef="let element">
+          {{ +element["Error Q2 (%)"] | number: "1.1-1" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Q1 (L/h)">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Q1 (L/h)</th>
+        <td mat-cell *matCellDef="let element">
+          {{ +element["Q1 (L/h)"] | number: "1.2-2" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Error Q1 (%)">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Error Q1 (%)</th>
+        <td mat-cell *matCellDef="let element">
+          {{ +element["Error Q1 (%)"] | number: "1.1-1" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Ensayo de presión Estatica">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Ensayo de presión Estatica
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element["Ensayo de presión Estatica"] }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Fecha de ejecución">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Fecha de ejecución
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element["Fecha de ejecución"] | date: "dd/MM/yyyy" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="N° Certificado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          N° Certificado
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element["N° Certificado"] }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Estado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element["Estado"] }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="loading">
+        <td mat-footer-cell *matFooterCellDef colspan="13" class="text-center">
+          Cargando...
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="noData">
+        <td mat-footer-cell *matFooterCellDef colspan="13" class="text-center">
+          No hay Datos para mostrar
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr
+        mat-footer-row
+        *matFooterRowDef="['loading']"
+        [ngClass]="{ hide: msgLoadTable == false }"
+      ></tr>
+      <tr
+        mat-footer-row
+        *matFooterRowDef="['noData']"
+        [ngClass]="{ hide: !msgNoHayDatos == true }"
+      ></tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    [pageSizeOptions]="[10, 15, 20]"
+    showFirstLastButtons
+  ></mat-paginator>
+</div>
