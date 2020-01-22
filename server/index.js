@@ -32,11 +32,10 @@ app.use(cors());
 app.use("/api", require("./routes/lote"));
 
 /** STATIC FILES */
-console.log(path.join(__dirname, "/dist"));
 if (process.env.NODE_ENV === "PRODUCTION") {
-  app.use(express.static(path.join(__dirname, "../dist/frontend")));
+  app.use(express.static(path.join(__dirname, "../dist")));
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../dist/frontend/index.html"));
+    res.sendFile(path.join(__dirname, "../dist/index.html"));
   });
 }
 
