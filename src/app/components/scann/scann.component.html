@@ -15,7 +15,7 @@
 </section>
 <section class="container">
   <div class="row">
-    <div class="col-12 col-sm-6">
+    <div class="col-12 col-sm-6 my-2">
       <div class="card">
         <div class="card-header">
           <h4>Datos Genericos</h4>
@@ -57,10 +57,24 @@
               [(ngModel)]="loteMedicion.fecha_ejecucion"
             />
           </div>
+          <div class="form-group" *ngIf="loteMedicion.estado != ''">
+            <label>Estado</label>
+            <div
+              class="alert"
+              [ngClass]="{
+                'alert-success':
+                  loteMedicion.estado.toLowerCase() == 'conforme',
+                'alert-danger': loteMedicion.estado.toLowerCase() != 'conforme'
+              }"
+              role="alert"
+            >
+              <h4 class="alert-heading">{{ loteMedicion.estado }}</h4>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-12 col-sm-6">
+    <div class="col-12 col-sm-6 my-2">
       <div class="card">
         <div class="card-header">
           <h4>Datos de Medicion</h4>
@@ -74,7 +88,7 @@
               [(ngModel)]="loteMedicion.nro_banco"
             />
           </div>
-          <div class="container">
+          <div class="container-fluid">
             <div class="row">
               <div class="col-12 col-sm-6">
                 <div class="form-group">
@@ -128,6 +142,21 @@
                   />
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Ensayo de presion estatica</label>
+            <div
+              class="alert"
+              [ngClass]="{
+                'alert-success':
+                  loteMedicion.ensayo_presion.toLowerCase() == 'sin fuga',
+                'alert-danger':
+                  loteMedicion.ensayo_presion.toLowerCase() != 'sin fuga'
+              }"
+              role="alert"
+            >
+              <h4 class="alert-heading">{{ loteMedicion.ensayo_presion }}</h4>
             </div>
           </div>
         </div>

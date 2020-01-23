@@ -47,6 +47,7 @@ export class ScannComponent implements OnInit {
         response => {
           if (response.medicion.length > 0) {
             this.loteMedicion = response.medicion[0];
+            console.log(this.loteMedicion);
             this.loteMedicion.fecha_ejecucion = this.datePipe.transform(
               this.loteMedicion.fecha_ejecucion,
               "yyyy/MM/dd"
@@ -61,6 +62,11 @@ export class ScannComponent implements OnInit {
         },
         error => {
           console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: error.status + "\n" + error.statusText,
+            text: error.url
+          });
         }
       );
     }
