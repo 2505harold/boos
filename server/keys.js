@@ -1,11 +1,11 @@
 module.exports = {
-  dbMySQL: {
+  dbMySQLlocal: {
     host: "localhost",
     user: "root",
     password: "Hgeminis2014+",
     database: "db_boos"
   },
-  dbMySQLonline: {
+  dbMySQL: {
     host: "remotemysql.com",
     user: "oZWIkuBKiT",
     password: "CAx8im7FAY",

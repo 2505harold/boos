@@ -15,7 +15,9 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatTableModule, MatPaginatorModule } from "@angular/material";
 import { UploadService } from "./services/upload.service";
 import { DatePipe } from "@angular/common";
-import { ScannComponent } from './components/scann/scann.component';
+import { ScannComponent } from "./components/scann/scann.component";
+import { RegistrocodigoService } from "./services/registrocodigo.service";
+import { DetallesPrescintoComponent } from './components/detalles-prescinto/detalles-prescinto.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { ScannComponent } from './components/scann/scann.component';
     HeaderComponent,
     WelcomeComponent,
     SlideComponent,
-    ScannComponent
+    ScannComponent,
+    DetallesPrescintoComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +38,7 @@ import { ScannComponent } from './components/scann/scann.component';
     MatPaginatorModule,
     HttpClientModule
   ],
-  providers: [UploadService, DatePipe],
+  providers: [UploadService, DatePipe, RegistrocodigoService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

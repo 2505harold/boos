@@ -19,15 +19,36 @@ create table detalle_verificacion_medidores(
     fecha_ejecucion date,
     certificado varchar(100),
     estado varchar(20),
+    numero_registro varchar(10),
     id_formato int
 
 );
+
 
 alter table detalle_verificacion_medidores
 add primary key (id);
 
 alter table detalle_verificacion_medidores
 modify id int not null auto_increment, auto_increment = 1;
+
+
+
+create table detalle_registro_prescintos(
+    id int not null,
+    codigo_apertura varchar(10),
+    responsable varchar(50),
+    fecha_apertura datetime,
+    fecha_cierre datetime    
+);
+
+alter table detalle_registro_prescintos
+add primary key (id);
+
+alter table detalle_registro_prescintos
+modify id int not null auto_increment, auto_increment = 1;
+
+
+
 
 create table formato_verificacion_medidores(
     id int not null,

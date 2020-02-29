@@ -14,6 +14,7 @@ export class LoteMedicion {
     public fecha_ejecucion: any,
     public certificado: string,
     public estado: string,
+    public numero_registro: string,
     public id_formato: any
   ) {}
 }

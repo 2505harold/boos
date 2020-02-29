@@ -16,7 +16,7 @@ app.use(cors());
 
 /** ROUTES SERVER*/
 app.use("/api", require("./routes/lote"));
-
+app.use("/api", require("./routes/sevone"));
 /** STATIC FILES */
 if (process.env.NODE_ENV === "PRODUCTION") {
   app.use(express.static(path.join(__dirname, "../dist")));

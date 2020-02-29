@@ -1,8 +1,8 @@
 const mysql = require("mysql");
 const { promisify } = require("util");
-const { dbMySQLonline } = require("./keys");
+const { dbMySQL } = require("./keys");
 
-const pool = mysql.createPool(dbMySQLonline);
+const pool = mysql.createPool(dbMySQL);
 
 pool.getConnection((err, conn) => {
   if (err) {

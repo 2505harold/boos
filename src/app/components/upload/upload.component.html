@@ -1,4 +1,3 @@
-
 <app-slide
   [titulo]="'Portal para subir y guardar datos de medicion'"
   [subtitulo]="
@@ -7,7 +6,7 @@
 ></app-slide>
 
 <div class="container mt-3">
-  <div class="form-inline">
+  <div class="form-inline d-flex justify-content-between">
     <div class="custom-file col-12 col-md-8">
       <input
         type="file"
@@ -20,7 +19,7 @@
         >Seleccione Archivo excel</label
       >
     </div>
-    <button class="btn btn-primary mx-1" (click)="guardar()">Guardar</button>
+    <button class="btn btn-info mx-1" (click)="guardar()">Guardar</button>
   </div>
   <div class="table-responsive">
     <table
