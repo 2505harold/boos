@@ -31,6 +31,10 @@ export class RegistrocodigoService {
     });
   }
 
+  obtenerListaNumerosRegistro(): Observable<any> {
+    return this.http.get(Global.URLserverNode + "/lista/registro");
+  }
+
   generarNumeroRegistro(codigo) {
     let codigo_generado;
     if (codigo.substring(0, codigo.indexOf("-")) == new Date().getFullYear()) {

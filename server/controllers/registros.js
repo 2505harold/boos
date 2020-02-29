@@ -56,4 +56,16 @@ ctrl.cerrarRegistro = async (req, res) => {
   );
 };
 
+ctrl.obtenerListaNumerosRegistros = async (req, res) => {
+  await dbMysql.query(
+    "select * from detalle_registro_prescintos order by fecha_cierre desc",
+    (error, registros) => {
+      if (error) {
+        res.json({ status: "error", message: error });
+      }
+      res.json({ status: "ok", registros });
+    }
+  );
+};
+
 module.exports = ctrl;

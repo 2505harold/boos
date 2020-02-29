@@ -11,5 +11,6 @@ router.get("/ultimoid/registro", ctrl2.getlastid);
 router.get("/buscar/registro/:id", ctrl2.buscarid);
 router.post("/guardar/codigo/registro", ctrl2.guardarCodigo);
 router.put("/cerrar/registro", ctrl2.cerrarRegistro);
+router.get("/lista/registro", ctrl2.obtenerListaNumerosRegistros);
 
 module.exports = router;

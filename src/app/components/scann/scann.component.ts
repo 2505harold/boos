@@ -108,6 +108,7 @@ export class ScannComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
+    this.numeroScan.nativeElement.innerText = 0;
     this.inputBuscar.nativeElement.focus();
   }
 
@@ -139,7 +140,12 @@ export class ScannComponent implements OnInit {
             })
             .subscribe(
               response => {
-                console.log(resp.message);
+                Swal.fire({
+                  icon: "success",
+                  title: "Hecho",
+                  text:
+                    "El numero registro fue almacenado. Y se procede a abrir un nuevo numero de registro"
+                });
               },
               error => {
                 console.log(error);
