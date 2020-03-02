@@ -55,6 +55,9 @@
               name="codigoPrescinto"
               [(ngModel)]="loteMedicion.codigo_prescinto"
               #inputCodigoPrescinto
+              (keyup)="
+                guardarCodePrescinto($event.clipboardData.getData('text/plain'))
+              "
               (paste)="
                 guardarCodePrescinto($event.clipboardData.getData('text/plain'))
               "

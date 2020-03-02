@@ -14,8 +14,14 @@ export class UploadService {
     });
   }
 
-  buscarCodigoMedidor(codigo: string): Observable<any> {
-    return this.http.get(Global.URLserverNode + "/buscar/" + codigo);
+  buscar(codigo: string, campo: string): Observable<any> {
+    return this.http.get(
+      Global.URLserverNode + "/buscar/lote/" + codigo + "/" + campo
+    );
+  }
+
+  lista(): Observable<any> {
+    return;
   }
 
   actualizar(lotemedicion): Observable<any> {

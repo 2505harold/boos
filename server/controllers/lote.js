@@ -16,7 +16,8 @@ ctrl.upload = async (req, res) => {
     "Ensayo de presión Estatica",
     "Fecha de ejecución",
     "N° Certificado",
-    "Estado"
+    "Estado",
+    "nombre file"
   ];
   let key_new = [
     "item",
@@ -31,7 +32,8 @@ ctrl.upload = async (req, res) => {
     "ensayo_presion",
     "fecha_ejecucion",
     "certificado",
-    "estado"
+    "estado",
+    "nombre_file"
   ];
 
   data.forEach(element => {
@@ -60,9 +62,11 @@ ctrl.upload = async (req, res) => {
 
 ctrl.buscar = async (req, res) => {
   const search = req.params.search;
+  const field = req.params.field;
+  console.log(field);
   await dbMySQL.query(
-    "SELECT * FROM detalle_verificacion_medidores WHERE  codigo_medidor = ?",
-    [search],
+    "SELECT * FROM detalle_verificacion_medidores WHERE  ?? = ?",
+    [field, search],
     (err, medicion) => {
       if (err) {
         res.json({ status: "error", message: err });

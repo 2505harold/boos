@@ -6,6 +6,9 @@ import { MatSort } from "@angular/material";
 import { UploadService } from "src/app/services/upload.service";
 import Swal from "sweetalert2";
 import { DatePipe } from "@angular/common";
+import { Importacion } from "../../models/importaciones";
+import { LoteMedicion } from "src/app/models/lotemedicion";
+import { ImportacionesService } from "src/app/services/importaciones.service";
 
 @Component({
   selector: "app-upload",
@@ -13,10 +16,12 @@ import { DatePipe } from "@angular/common";
   styleUrls: ["./upload.component.css"]
 })
 export class UploadComponent implements OnInit {
+  importacion: Importacion = new Importacion("", "", "", "");
   @ViewChild("lblFileInput", { static: false }) lblFileInput: ElementRef; //Seleccione archivo
   @ViewChild("fileInput", { static: false }) fileInput: ElementRef; //input del file subido
   msgNoHayDatos = true;
   msgLoadTable = false;
+  nameFile: string;
   jsonData: any;
   dataSource;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -37,11 +42,10 @@ export class UploadComponent implements OnInit {
     "Estado"
   ];
 
-  // displayedColumns: string[] = ["position", "name", "weight", "symbol"];
-  // dataSource = ELEMENT_DATA;
   constructor(
     private uploadService: UploadService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private importacionService: ImportacionesService
   ) {}
 
   ngOnInit() {}
@@ -49,6 +53,7 @@ export class UploadComponent implements OnInit {
   guardar() {
     this.uploadService.saveDataBase(this.jsonData).subscribe(
       response => {
+        console.log(response);
         if (response.status == "error") {
           Swal.fire({
             icon: "error",
@@ -56,15 +61,37 @@ export class UploadComponent implements OnInit {
             text: response.message["sqlMessage"]
           });
         } else {
-          this.fileInput.nativeElement.value = "";
-          this.lblFileInput.nativeElement.innerText =
-            "Seleccione archivo excel";
-          this.dataSource = new MatTableDataSource();
-          Swal.fire({
-            icon: "success",
-            title: "Hecho",
-            text: "el almacenamiento de los datos se realizo satisfactoriamente"
-          });
+          this.importacion.nombre = this.nameFile;
+          this.importacion.fecha_subida = this.datePipe.transform(
+            new Date(),
+            "yyyy/MM/dd hh:mm:ss"
+          );
+          this.importacionService.guardar(this.importacion).subscribe(
+            response => {
+              if (response.status == "ok") {
+                this.fileInput.nativeElement.value = "";
+                this.lblFileInput.nativeElement.innerText =
+                  "Seleccione archivo excel";
+                this.dataSource = new MatTableDataSource();
+                Swal.fire({
+                  icon: "success",
+                  title: "Hecho",
+                  text:
+                    "el almacenamiento de los datos se realizo satisfactoriamente"
+                });
+              } else {
+                console.log(response);
+                Swal.fire({
+                  icon: "error",
+                  title: response.message.sqlMessage,
+                  text: response.message.sql
+                });
+              }
+            },
+            error => {
+              console.log(error);
+            }
+          );
         }
       },
       error => {
@@ -83,6 +110,7 @@ export class UploadComponent implements OnInit {
     let workbook = null;
     const reader = new FileReader();
     const file = event.target.files[0];
+    this.nameFile = file.name.substring(0, file.name.indexOf(".xls"));
     reader.onload = event => {
       const data = reader.result;
       workbook = XLSX.read(data, {
@@ -92,13 +120,6 @@ export class UploadComponent implements OnInit {
         cellNF: false,
         dateNF: "yyyy/mm/dd;@"
       });
-      //jsonData = workbook.SheetNames.reduce((initial, name) => {
-      //  let sheet = workbook.Sheets[name];
-      //   initial[name] = XLSX.utils.sheet_to_json(sheet);
-      //   return initial;
-      // }, {});
-
-      //extraemos los datos del archivo de excel de lotes
       var worksheet = workbook.Sheets[workbook.SheetNames[0]];
       var range = XLSX.utils.decode_range(worksheet["!ref"]);
 
@@ -116,6 +137,7 @@ export class UploadComponent implements OnInit {
           element["Fecha de ejecución"],
           "yyyy-MM-dd"
         );
+        element["nombre file"] = this.nameFile;
         if (element["Q3 (L/h)"] === "-") {
           element["Q3 (L/h)"] = 0;
           element["Error Q3 (%)"] = 0;

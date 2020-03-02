@@ -1,7 +1,7 @@
 export class LoteMedicion {
   constructor(
     public item: number,
-    public nro_banco: any,
+    public nro_banco: string,
     public codigo_medidor: string,
     public codigo_prescinto: string,
     public q3: any,
@@ -14,7 +14,6 @@ export class LoteMedicion {
     public fecha_ejecucion: any,
     public certificado: string,
     public estado: string,
-    public numero_registro: string,
-    public id_formato: any
+    public nombre_file: string
   ) {}
 }

@@ -19,8 +19,7 @@ create table detalle_verificacion_medidores(
     fecha_ejecucion date,
     certificado varchar(100),
     estado varchar(20),
-    numero_registro varchar(10),
-    id_formato int
+    nombre_file varchar(30)
 
 );
 
@@ -47,7 +46,19 @@ add primary key (id);
 alter table detalle_registro_prescintos
 modify id int not null auto_increment, auto_increment = 1;
 
+create table detalle_archivos_importados (
+    id int not null,
+    nombre varchar(30),
+    fecha_subida datetime,
+    responsable varchar(50),
+    estado_prescintos varchar(10)
+);
 
+alter table detalle_archivos_importados
+add primary key (id);
+
+alter table detalle_archivos_importados
+modify id int not null auto_increment, auto_increment = 1;
 
 
 create table formato_verificacion_medidores(

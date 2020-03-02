@@ -35,7 +35,6 @@ export class ScannComponent implements OnInit {
     "",
     "",
     "",
-    "",
     ""
   );
   subtituloSlide: string =
@@ -55,28 +54,37 @@ export class ScannComponent implements OnInit {
           this.registrocodigoService
             .obtenerRegistroPorId(response.id)
             .subscribe(response => {
-              const codigo = response.registro[0].codigo_apertura;
-              let codigo_generado = this.registrocodigoService.generarNumeroRegistro(
-                codigo
-              );
-              this.codigoRegistro.nativeElement.innerText = codigo_generado;
-              //almacenamos
-              this.registrocodigoService
-                .guardarCodigoRegistro({
-                  codigo_apertura: codigo_generado,
-                  fecha_apertura: this.datePipe.transform(
-                    new Date(),
-                    "yyyy-MM-dd hh:mm:ss"
-                  )
-                })
-                .subscribe(
-                  response => {
-                    console.log(response.message);
-                  },
-                  error => {
-                    console.log(error);
-                  }
+              if (response.status == "ok") {
+                const codigo = response.registro[0].codigo_apertura;
+                let codigo_generado = this.registrocodigoService.generarNumeroRegistro(
+                  codigo
                 );
+                this.codigoRegistro.nativeElement.innerText = codigo_generado;
+                //almacenamos
+                this.registrocodigoService
+                  .guardarCodigoRegistro({
+                    codigo_apertura: codigo_generado,
+                    fecha_apertura: this.datePipe.transform(
+                      new Date(),
+                      "yyyy-MM-dd hh:mm:ss"
+                    )
+                  })
+                  .subscribe(
+                    response => {
+                      console.log(response.message);
+                    },
+                    error => {
+                      console.log(error);
+                    }
+                  );
+              } else {
+                Swal.fire({
+                  icon: "success",
+                  title: response.message.code,
+                  text:
+                    response.message.sqlMessage + ". " + response.message.sql
+                });
+              }
             });
         } else {
           //insertamos en el HTML el codigo
@@ -162,7 +170,7 @@ export class ScannComponent implements OnInit {
     if (value != "") {
       this.numeroScan.nativeElement.innerText =
         parseInt(this.numeroScan.nativeElement.innerText) + 1;
-      this.uploadService.buscarCodigoMedidor(value).subscribe(
+      this.uploadService.buscar(value, "codigo_medidor").subscribe(
         response => {
           if (response.medicion.length > 0) {
             this.loteMedicion = response.medicion[0];
@@ -193,7 +201,7 @@ export class ScannComponent implements OnInit {
   guardarCodePrescinto(value) {
     if (value != "") {
       this.loteMedicion.codigo_prescinto = value;
-      this.loteMedicion.numero_registro = this.codigoRegistro.nativeElement.innerText;
+      //this.loteMedicion.numero_registro = this.codigoRegistro.nativeElement.innerText;
       this.uploadService.actualizar(this.loteMedicion).subscribe(
         response => {
           if (response.status == "error") {
