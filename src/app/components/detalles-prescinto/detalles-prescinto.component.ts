@@ -25,6 +25,7 @@ export class DetallesPrescintoComponent implements OnInit {
     "fecha_subida",
     "conforme",
     "noconforme",
+    "etiquetado",
     "accion"
   ];
   msgNoHayDatos = false;

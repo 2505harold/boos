@@ -63,7 +63,6 @@ ctrl.upload = async (req, res) => {
 ctrl.buscar = async (req, res) => {
   const search = req.params.search;
   const field = req.params.field;
-  console.log(field);
   await dbMySQL.query(
     "SELECT * FROM detalle_verificacion_medidores WHERE  ?? = ?",
     [field, search],

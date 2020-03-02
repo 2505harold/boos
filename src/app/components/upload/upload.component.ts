@@ -51,55 +51,75 @@ export class UploadComponent implements OnInit {
   ngOnInit() {}
 
   guardar() {
-    this.uploadService.saveDataBase(this.jsonData).subscribe(
+    this.importacionService.buscar(this.nameFile, "nombre").subscribe(
       response => {
-        console.log(response);
-        if (response.status == "error") {
-          Swal.fire({
-            icon: "error",
-            title: response.message["code"],
-            text: response.message["sqlMessage"]
-          });
-        } else {
-          this.importacion.nombre = this.nameFile;
-          this.importacion.fecha_subida = this.datePipe.transform(
-            new Date(),
-            "yyyy/MM/dd hh:mm:ss"
-          );
-          this.importacionService.guardar(this.importacion).subscribe(
-            response => {
-              if (response.status == "ok") {
-                this.fileInput.nativeElement.value = "";
-                this.lblFileInput.nativeElement.innerText =
-                  "Seleccione archivo excel";
-                this.dataSource = new MatTableDataSource();
-                Swal.fire({
-                  icon: "success",
-                  title: "Hecho",
-                  text:
-                    "el almacenamiento de los datos se realizo satisfactoriamente"
-                });
-              } else {
+        if (response.status == "ok") {
+          if (response.importacion.length == 0) {
+            this.uploadService.saveDataBase(this.jsonData).subscribe(
+              response => {
                 console.log(response);
+                if (response.status == "error") {
+                  Swal.fire({
+                    icon: "error",
+                    title: response.message["code"],
+                    text: response.message["sqlMessage"]
+                  });
+                } else {
+                  this.importacion.nombre = this.nameFile;
+                  this.importacion.fecha_subida = this.datePipe.transform(
+                    new Date(),
+                    "yyyy/MM/dd hh:mm:ss"
+                  );
+                  this.importacionService.guardar(this.importacion).subscribe(
+                    response => {
+                      if (response.status == "ok") {
+                        this.fileInput.nativeElement.value = "";
+                        this.lblFileInput.nativeElement.innerText =
+                          "Seleccione archivo excel";
+                        this.dataSource = new MatTableDataSource();
+                        Swal.fire({
+                          icon: "success",
+                          title: "Hecho",
+                          text:
+                            "el almacenamiento de los datos se realizo satisfactoriamente"
+                        });
+                      } else {
+                        console.log(response);
+                        Swal.fire({
+                          icon: "error",
+                          title: response.message.sqlMessage,
+                          text: response.message.sql
+                        });
+                      }
+                    },
+                    error => {
+                      console.log(error);
+                    }
+                  );
+                }
+              },
+              error => {
                 Swal.fire({
                   icon: "error",
-                  title: response.message.sqlMessage,
-                  text: response.message.sql
+                  title: error.statusText,
+                  text: error.message
                 });
               }
-            },
-            error => {
-              console.log(error);
-            }
-          );
+            );
+          } else {
+            Swal.fire({
+              icon: "info",
+              title: "Dato repetido",
+              text:
+                "El nombre del archivo que intenta guardar no puede ser guardado dos veces"
+            });
+          }
+        } else {
+          console.log(response);
         }
       },
       error => {
-        Swal.fire({
-          icon: "error",
-          title: error.statusText,
-          text: error.message
-        });
+        console.log(error);
       }
     );
   }

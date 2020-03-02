@@ -38,6 +38,14 @@
           }}</span>
         </td>
       </ng-container>
+      <ng-container matColumnDef="etiquetado">
+        <th mat-header-cell *matHeaderCellDef>Con Etiquetado</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="badge badge-pill badge-warning">{{
+            element["etiquetado"]
+          }}</span>
+        </td>
+      </ng-container>
 
       <ng-container matColumnDef="accion">
         <th mat-header-cell *matHeaderCellDef>accion</th>

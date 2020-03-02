@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { DatePipe } from "@angular/common";
 import { NgForm } from "@angular/forms";
 import { RegistrocodigoService } from "src/app/services/registrocodigo.service";
-import { Router } from "@angular/router";
+declare var jQuery: any;
 
 @Component({
   selector: "app-scann",
@@ -42,147 +42,64 @@ export class ScannComponent implements OnInit {
 
   constructor(
     private uploadService: UploadService,
-    private datePipe: DatePipe,
-    private registrocodigoService: RegistrocodigoService,
-    private router: Router
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit() {
-    this.registrocodigoService.obtenerUltimoId().subscribe(
-      response => {
-        if (response.id) {
-          this.registrocodigoService
-            .obtenerRegistroPorId(response.id)
-            .subscribe(response => {
-              if (response.status == "ok") {
-                const codigo = response.registro[0].codigo_apertura;
-                let codigo_generado = this.registrocodigoService.generarNumeroRegistro(
-                  codigo
-                );
-                this.codigoRegistro.nativeElement.innerText = codigo_generado;
-                //almacenamos
-                this.registrocodigoService
-                  .guardarCodigoRegistro({
-                    codigo_apertura: codigo_generado,
-                    fecha_apertura: this.datePipe.transform(
-                      new Date(),
-                      "yyyy-MM-dd hh:mm:ss"
-                    )
-                  })
-                  .subscribe(
-                    response => {
-                      console.log(response.message);
-                    },
-                    error => {
-                      console.log(error);
-                    }
-                  );
-              } else {
-                Swal.fire({
-                  icon: "success",
-                  title: response.message.code,
-                  text:
-                    response.message.sqlMessage + ". " + response.message.sql
-                });
-              }
-            });
-        } else {
-          //insertamos en el HTML el codigo
-          this.codigoRegistro.nativeElement.innerText =
-            new Date().getFullYear() + "-0000";
-          //almacenamos
-          this.registrocodigoService
-            .guardarCodigoRegistro({
-              codigo_apertura: new Date().getFullYear() + "-0000",
-              fecha_apertura: this.datePipe.transform(
-                new Date(),
-                "yyyy-MM-dd hh:mm:ss"
-              )
-            })
-            .subscribe(
-              response => {
-                console.log(response.message);
-              },
-              error => {
-                console.log(error);
-              }
-            );
-        }
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    // (function($) {
+    //   $(document).ready(function() {
+    //     $("body .codigoMedidor").change(function() {
+    //       $.ajax({
+    //         type: "GET",
+    //         url:
+    //           Global.URLserverNode +
+    //           "/buscar/lote/" +
+    //           $(this).val() +
+    //           "/codigo_medidor",
+    //         data: "{}",
+    //         contentType: "application/json; charset=utf-8",
+    //         dataType: "json",
+    //         success: function(result) {
+    //           console.log(result);
+    //         },
+    //         error: function(msg) {
+    //           alert(msg.responseText);
+    //         }
+    //       });
+    //     });
+    //   });
+    // })(jQuery);
   }
 
   ngAfterViewInit(): void {
-    this.numeroScan.nativeElement.innerText = 0;
     this.inputBuscar.nativeElement.focus();
   }
 
-  nuevoRegistro() {
-    this.registrocodigoService
-      .cerrarRegistro({
-        codigo_registro: this.codigoRegistro.nativeElement.innerText,
-        fecha_cierre: this.datePipe.transform(new Date(), "yyyy-MM-dd hh:mm:ss")
-      })
-      .subscribe(
-        resp => {
-          this.form.reset();
-          this.inputBuscar.nativeElement.value = "";
-          this.inputBuscar.nativeElement.focus();
-          this.loteMedicion.ensayo_presion = "";
-          this.loteMedicion.estado = "";
-          this.numeroScan.nativeElement.innerText = 0;
-          const numero_registro = this.registrocodigoService.generarNumeroRegistro(
-            this.codigoRegistro.nativeElement.innerText
-          );
-          this.codigoRegistro.nativeElement.innerText = numero_registro;
-          this.registrocodigoService
-            .guardarCodigoRegistro({
-              codigo_apertura: numero_registro,
-              fecha_apertura: this.datePipe.transform(
-                new Date(),
-                "yyyy-MM-dd hh:mm:ss"
-              )
-            })
-            .subscribe(
-              response => {
-                Swal.fire({
-                  icon: "success",
-                  title: "Hecho",
-                  text:
-                    "El numero registro fue almacenado. Y se procede a abrir un nuevo numero de registro"
-                });
-              },
-              error => {
-                console.log(error);
-              }
-            );
-        },
-        err => {
-          console.log(err);
-        }
-      );
+  onPaste(event: ClipboardEvent) {
+    console.log(event.clipboardData.getData("text"));
   }
 
   buscar(value) {
-    if (value != "") {
-      this.numeroScan.nativeElement.innerText =
-        parseInt(this.numeroScan.nativeElement.innerText) + 1;
+    console.log(parseInt(value));
+    if (value.length > 9) {
       this.uploadService.buscar(value, "codigo_medidor").subscribe(
         response => {
-          if (response.medicion.length > 0) {
-            this.loteMedicion = response.medicion[0];
-            this.loteMedicion.fecha_ejecucion = this.datePipe.transform(
-              this.loteMedicion.fecha_ejecucion,
-              "yyyy/MM/dd"
-            );
-            if (
-              !this.loteMedicion.codigo_prescinto ||
-              this.loteMedicion.codigo_prescinto != ""
-            ) {
-              this.inputCodigoPrescinto.nativeElement.focus();
+          console.log(response);
+          if (response.status == "ok") {
+            if (response.medicion.length > 0) {
+              this.loteMedicion = response.medicion[0];
+              this.loteMedicion.fecha_ejecucion = this.datePipe.transform(
+                this.loteMedicion.fecha_ejecucion,
+                "yyyy/MM/dd"
+              );
+              if (
+                !this.loteMedicion.codigo_prescinto ||
+                this.loteMedicion.codigo_prescinto != ""
+              ) {
+                this.inputCodigoPrescinto.nativeElement.focus();
+              }
+            } else {
+              console.log(response);
             }
           }
         },
@@ -195,6 +112,12 @@ export class ScannComponent implements OnInit {
           });
         }
       );
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Codigo no permitido",
+        text: "La longitud del codigo tiene que ser mayor a 10 digitos"
+      });
     }
   }
 

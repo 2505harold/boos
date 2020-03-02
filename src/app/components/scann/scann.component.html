@@ -1,35 +1,5 @@
 <app-slide [titulo]="tituloSlide" [subtitulo]="subtituloSlide"></app-slide>
 
-<section class="container mt-3">
-  <div
-    class="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-3"
-  >
-    <h4 class="font-weight-light text-info">
-      Numero de Registro :
-      <span #codigoRegistro></span>
-    </h4>
-    <div class="right">
-      <span class="badge badge-success badge-number-scan-text mx-1"
-        >Scaneos
-        <span #numberScan class="badge badge-number-scan-number">0</span></span
-      >
-      <button (click)="nuevoRegistro()" class="btn btn-secondary mx-1">
-        Nuevo
-      </button>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Ingrese codigo del medidor a buscar para ingreso de codigo prescinto"
-      (paste)="buscar($event.clipboardData.getData('text/plain'))"
-      (keyup)="buscar(inputBuscar.value)"
-      #inputBuscar
-    />
-  </div>
-</section>
 <section class="container">
   <form class="row" #form="ngForm">
     <div class="col-12 col-sm-6 my-2">
@@ -42,22 +12,21 @@
             <label>Codigo Medidor</label>
             <input
               type="input"
-              class="form-control"
-              [(ngModel)]="loteMedicion.codigo_medidor"
-              name="codigoMedidor"
+              class="form-control codigoMedidor"
+              placeholder="Ingrese codigo del medidor a buscar para ingreso de codigo prescinto"
+              (paste)="buscar($event.clipboardData.getData('text/plain'))"
+              #inputBuscar
             />
           </div>
+
           <div class="form-group">
             <label>Codigo Prescinto</label>
             <input
               type="input"
-              class="form-control"
+              class="form-control codigoPrescinto"
               name="codigoPrescinto"
               [(ngModel)]="loteMedicion.codigo_prescinto"
               #inputCodigoPrescinto
-              (keyup)="
-                guardarCodePrescinto($event.clipboardData.getData('text/plain'))
-              "
               (paste)="
                 guardarCodePrescinto($event.clipboardData.getData('text/plain'))
               "
@@ -70,6 +39,7 @@
               class="form-control"
               name="numeroCertificado"
               [(ngModel)]="loteMedicion.certificado"
+              readonly
             />
           </div>
           <div class="form-group">
@@ -79,6 +49,7 @@
               class="form-control"
               name="fechaEjecucion"
               [(ngModel)]="loteMedicion.fecha_ejecucion"
+              readonly
             />
           </div>
           <div class="form-group" *ngIf="loteMedicion.estado != ''">
@@ -111,6 +82,7 @@
               class="form-control"
               name="numeroBanco"
               [(ngModel)]="loteMedicion.nro_banco"
+              readonly
             />
           </div>
           <div class="container-fluid">
@@ -123,6 +95,7 @@
                     name="q3"
                     class="form-control"
                     [(ngModel)]="loteMedicion.q3"
+                    readonly
                   />
                 </div>
                 <div class="form-group">
@@ -132,6 +105,7 @@
                     name="q2"
                     class="form-control"
                     [(ngModel)]="loteMedicion.q2"
+                    readonly
                   />
                 </div>
                 <div class="form-group">
@@ -141,6 +115,7 @@
                     name="q1"
                     class="form-control"
                     [(ngModel)]="loteMedicion.q1"
+                    readonly
                   />
                 </div>
               </div>
@@ -152,6 +127,7 @@
                     name="errorq3"
                     class="form-control"
                     [(ngModel)]="loteMedicion.error_q1"
+                    readonly
                   />
                 </div>
                 <div class="form-group">
@@ -161,6 +137,7 @@
                     name="errorq2"
                     class="form-control"
                     [(ngModel)]="loteMedicion.error_q2"
+                    readonly
                   />
                 </div>
                 <div class="form-group">
@@ -170,6 +147,7 @@
                     name="errorq1"
                     class="form-control"
                     [(ngModel)]="loteMedicion.error_q3"
+                    readonly
                   />
                 </div>
               </div>

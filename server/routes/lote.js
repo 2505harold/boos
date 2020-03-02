@@ -10,6 +10,7 @@ router.get("/buscar/lote/:search/:field", ctrl.buscar);
 //detalle de excel importados
 router.get("/obtener/importaciones", ctrl3.obtenerTabla);
 router.post("/guardar/importacion", ctrl3.guardar);
+router.get("/buscar/importacion/:value/:field", ctrl3.buscar);
 //registro de codigo de prescintos
 router.get("/ultimoid/registro", ctrl2.getlastid);
 router.get("/buscar/registro/:id", ctrl2.buscarid);

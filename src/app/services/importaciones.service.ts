@@ -16,6 +16,11 @@ export class ImportacionesService {
       { headers }
     );
   }
+  buscar(valor: string, campo: string): Observable<any> {
+    return this.http.get(
+      Global.URLserverNode + "/buscar/importacion/" + valor + "/" + campo
+    );
+  }
 
   lista(): Observable<any> {
     return this.http.get(Global.URLserverNode + "/obtener/importaciones");

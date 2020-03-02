@@ -15,13 +15,29 @@ ctrl.guardar = async (req, res) => {
   );
 };
 
+ctrl.buscar = async (req, res) => {
+  const value = req.params.value;
+  const field = req.params.field;
+  await dbMysql.query(
+    "SELECT * FROM detalle_archivos_importados WHERE  ?? = ?",
+    [field, value],
+    (err, importacion) => {
+      if (err) {
+        res.json({ status: "error", message: err });
+      }
+      res.json({ status: "ok", importacion });
+    }
+  );
+};
+
 ctrl.obtenerTabla = async (req, res) => {
   await dbMysql.query(
     "select t1.*, t2.* from detalle_archivos_importados t1 " +
       "inner join " +
       "(select nombre_file," +
       "sum(case  when estado = 'CONFORME' then 1 else 0 end) as conforme, " +
-      "sum(case  when estado = 'NO CONFORME' then 1 else 0 end) as noconforme " +
+      "sum(case  when estado = 'NO CONFORME' then 1 else 0 end) as noconforme, " +
+      "sum(case  when (codigo_prescinto is not null or codigo_prescinto != '') then 1 else 0 end) as etiquetado " +
       "from detalle_verificacion_medidores " +
       "group by nombre_file) t2 " +
       "on t1.nombre = t2.nombre_file",
@@ -33,17 +49,5 @@ ctrl.obtenerTabla = async (req, res) => {
     }
   );
 };
-
-// ctrl.obtenerTabla = async (req, res) => {
-//   await dbMysql.query(
-//     "SELECT * FROM detalle_archivos_importados order by fecha_subida desc",
-//     (err, importaciones) => {
-//       if (err) {
-//         res.json({ status: "error", message: err });
-//       }
-//       res.json({ status: "ok", importaciones });
-//     }
-//   );
-// };
 
 module.exports = ctrl;
