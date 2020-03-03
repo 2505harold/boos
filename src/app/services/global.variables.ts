@@ -1,4 +1,4 @@
 export var Global = {
-  URLserverNode2: "/api",
-  URLserverNode: "http://localhost:3000/api"
+  URLserverNode: "/api",
+  URLserverNode2: "http://localhost:3000/api"
 };
