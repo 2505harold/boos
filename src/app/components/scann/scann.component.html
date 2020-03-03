@@ -14,22 +14,29 @@
               type="input"
               class="form-control codigoMedidor"
               placeholder="Ingrese codigo del medidor a buscar para ingreso de codigo prescinto"
-              (paste)="buscar($event.clipboardData.getData('text/plain'))"
               #inputBuscar
+              autocomplete="false"
+              (change)="buscar($event)"
             />
           </div>
 
           <div class="form-group">
-            <label>Codigo Prescinto</label>
+            <div class="form-inline">
+              <label>Codigo Prescinto</label>
+              <div
+                class="spinner-grow text-primary ml-auto load d-none"
+                role="status"
+              ></div>
+            </div>
+
             <input
               type="input"
               class="form-control codigoPrescinto"
               name="codigoPrescinto"
               [(ngModel)]="loteMedicion.codigo_prescinto"
               #inputCodigoPrescinto
-              (paste)="
-                guardarCodePrescinto($event.clipboardData.getData('text/plain'))
-              "
+              autocomplete="false"
+              (change)="guardarCodePrescinto($event)"
             />
           </div>
           <div class="form-group">
@@ -176,3 +183,6 @@
 <section class="container">
   <div class="row"></div>
 </section>
+<div class="variables d-none">
+  <label id="id"></label>
+</div>

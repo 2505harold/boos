@@ -1,10 +1,17 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  SimpleChanges
+} from "@angular/core";
 import { UploadService } from "src/app/services/upload.service";
 import { LoteMedicion } from "src/app/models/lotemedicion";
 import Swal from "sweetalert2";
 import { DatePipe } from "@angular/common";
 import { NgForm } from "@angular/forms";
 import { RegistrocodigoService } from "src/app/services/registrocodigo.service";
+import { Global } from "../../services/global.variables";
 declare var jQuery: any;
 
 @Component({
@@ -45,46 +52,29 @@ export class ScannComponent implements OnInit {
     private datePipe: DatePipe
   ) {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes["inputBuscar"].currentValue);
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+  }
+
   ngOnInit() {
-    // (function($) {
-    //   $(document).ready(function() {
-    //     $("body .codigoMedidor").change(function() {
-    //       $.ajax({
-    //         type: "GET",
-    //         url:
-    //           Global.URLserverNode +
-    //           "/buscar/lote/" +
-    //           $(this).val() +
-    //           "/codigo_medidor",
-    //         data: "{}",
-    //         contentType: "application/json; charset=utf-8",
-    //         dataType: "json",
-    //         success: function(result) {
-    //           console.log(result);
-    //         },
-    //         error: function(msg) {
-    //           alert(msg.responseText);
-    //         }
-    //       });
-    //     });
-    //   });
-    // })(jQuery);
+    (function($) {
+      $(document).ready(function() {
+        $(".codigoMedidor").focus();
+      });
+    })(jQuery);
   }
 
   ngAfterViewInit(): void {
     this.inputBuscar.nativeElement.focus();
   }
 
-  onPaste(event: ClipboardEvent) {
-    console.log(event.clipboardData.getData("text"));
-  }
-
-  buscar(value) {
-    console.log(parseInt(value));
+  buscar(event) {
+    const value = event.target.value;
     if (value.length > 9) {
       this.uploadService.buscar(value, "codigo_medidor").subscribe(
         response => {
-          console.log(response);
           if (response.status == "ok") {
             if (response.medicion.length > 0) {
               this.loteMedicion = response.medicion[0];
@@ -121,41 +111,56 @@ export class ScannComponent implements OnInit {
     }
   }
 
-  guardarCodePrescinto(value) {
-    if (value != "") {
-      this.loteMedicion.codigo_prescinto = value;
-      //this.loteMedicion.numero_registro = this.codigoRegistro.nativeElement.innerText;
-      this.uploadService.actualizar(this.loteMedicion).subscribe(
-        response => {
-          if (response.status == "error") {
+  guardarCodePrescinto(event) {
+    if (this.inputBuscar.nativeElement.innerText != "") {
+      const value = event.target.value;
+      if (value.length > 1 && value.length < 9) {
+        this.loteMedicion.codigo_prescinto = value;
+        //this.loteMedicion.numero_registro = this.codigoRegistro.nativeElement.innerText;
+        this.uploadService.actualizar(this.loteMedicion).subscribe(
+          response => {
+            if (response.status == "error") {
+              Swal.fire({
+                icon: "error",
+                title: response.message["code"],
+                text: response.message["sqlMessage"]
+              });
+            } else {
+              //Si no hay error
+              this.form.reset();
+              this.inputBuscar.nativeElement.value = "";
+              this.inputBuscar.nativeElement.focus();
+              this.loteMedicion.ensayo_presion = "";
+              this.loteMedicion.estado = "";
+              Swal.fire({
+                icon: "success",
+                title: "Hecho",
+                text:
+                  "el almacenamiento de los datos se realizo satisfactoriamente"
+              });
+            }
+          },
+          error => {
             Swal.fire({
               icon: "error",
-              title: response.message["code"],
-              text: response.message["sqlMessage"]
-            });
-          } else {
-            //Si no hay error
-            this.form.reset();
-            this.inputBuscar.nativeElement.value = "";
-            this.inputBuscar.nativeElement.focus();
-            this.loteMedicion.ensayo_presion = "";
-            this.loteMedicion.estado = "";
-            Swal.fire({
-              icon: "success",
-              title: "Hecho",
-              text:
-                "el almacenamiento de los datos se realizo satisfactoriamente"
+              title: error.status,
+              text: error.message
             });
           }
-        },
-        error => {
-          Swal.fire({
-            icon: "error",
-            title: error.status,
-            text: error.message
-          });
-        }
-      );
+        );
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Codigo no permitido",
+          text: "La longitud del codigo tiene que estar entre 1 a 8 digitos"
+        });
+      }
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Orden de ingreso de datos",
+        text: "Primero tiene que ingresar el codigo del medidor"
+      });
     }
   }
 }
