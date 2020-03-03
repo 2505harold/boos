@@ -71,7 +71,8 @@ export class ScannComponent implements OnInit {
   }
 
   buscar(event) {
-    const value = event.target.value;
+    const value = event.clipboardData.getData("text");
+    console.log(value);
     if (value.length > 9) {
       this.uploadService.buscar(value, "codigo_medidor").subscribe(
         response => {
@@ -112,8 +113,8 @@ export class ScannComponent implements OnInit {
   }
 
   guardarCodePrescinto(event) {
-    if (this.inputBuscar.nativeElement.innerText != "") {
-      const value = event.target.value;
+    if (this.loteMedicion.codigo_prescinto != "") {
+      const value = event.clipboardData.getData("text");
       if (value.length > 1 && value.length < 9) {
         this.loteMedicion.codigo_prescinto = value;
         //this.loteMedicion.numero_registro = this.codigoRegistro.nativeElement.innerText;
