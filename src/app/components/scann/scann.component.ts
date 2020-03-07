@@ -27,6 +27,8 @@ export class ScannComponent implements OnInit {
   @ViewChild("codigoRegistro", { static: false }) codigoRegistro: ElementRef;
   @ViewChild("form", { static: false }) form: NgForm;
   tituloSlide: string = "Portal para ingresar codigo de Prescinto";
+  inputFind: string;
+  inputPrescinto: string;
   loteMedicion: LoteMedicion = new LoteMedicion(
     0,
     "",
@@ -52,12 +54,6 @@ export class ScannComponent implements OnInit {
     private datePipe: DatePipe
   ) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes["inputBuscar"].currentValue);
-    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-    //Add '${implements OnChanges}' to the class.
-  }
-
   ngOnInit() {
     (function($) {
       $(document).ready(function() {
@@ -66,32 +62,57 @@ export class ScannComponent implements OnInit {
     })(jQuery);
   }
 
-  ngAfterViewInit(): void {
-    this.inputBuscar.nativeElement.focus();
-  }
-
-  buscar(event) {
-    const value = event.clipboardData.getData("text");
-    console.log(value);
+  buscar(value: string) {
+    //empieza a buscar cuando el codigo es mayor a 11
     if (value.length > 9) {
       this.uploadService.buscar(value, "codigo_medidor").subscribe(
         response => {
+          //verificamos si hay algun error
           if (response.status == "ok") {
+            //verificamos si el valor devuelto contiene mediciones
             if (response.medicion.length > 0) {
-              this.loteMedicion = response.medicion[0];
-              this.loteMedicion.fecha_ejecucion = this.datePipe.transform(
-                this.loteMedicion.fecha_ejecucion,
-                "yyyy/MM/dd"
-              );
-              if (
-                !this.loteMedicion.codigo_prescinto ||
-                this.loteMedicion.codigo_prescinto != ""
-              ) {
-                this.inputCodigoPrescinto.nativeElement.focus();
+              //verificamos si existe codigo medicion
+              console.log(response);
+              if (!response.medicion[0].codigo_prescinto) {
+                this.loteMedicion = response.medicion[0];
+                this.loteMedicion.fecha_ejecucion = this.datePipe.transform(
+                  this.loteMedicion.fecha_ejecucion,
+                  "yyyy/MM/dd"
+                );
+                if (
+                  !this.loteMedicion.codigo_prescinto ||
+                  this.loteMedicion.codigo_prescinto != ""
+                ) {
+                  this.inputCodigoPrescinto.nativeElement.focus();
+                }
+              } else {
+                //codigo de prescinto ya existe
+                this.inputFind = "";
+                Swal.fire({
+                  icon: "info",
+                  title: "Codigo creado",
+                  text:
+                    "Se verifica que el medidor ya cuenta con codigo de prescinto ingresado"
+                });
               }
             } else {
-              console.log(response);
+              //no hay registro de medicion
+              this.inputFind = "";
+              Swal.fire({
+                icon: "info",
+                title: "Registro no encontrado",
+                text: "No existe el codigo de medidor ingresado"
+              });
             }
+          } else {
+            //existe un error en la base de datos
+            console.log(response);
+            this.inputFind = "";
+            Swal.fire({
+              icon: "error",
+              title: response.message.code,
+              text: response.message.sqlMessage + "." + response.message.sql
+            });
           }
         },
         error => {
@@ -103,65 +124,53 @@ export class ScannComponent implements OnInit {
           });
         }
       );
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Codigo no permitido",
-        text: "La longitud del codigo tiene que ser mayor a 10 digitos"
-      });
     }
   }
 
-  guardarCodePrescinto(event) {
-    if (this.loteMedicion.codigo_prescinto != "") {
-      const value = event.clipboardData.getData("text");
-      if (value.length > 1 && value.length < 9) {
-        this.loteMedicion.codigo_prescinto = value;
-        //this.loteMedicion.numero_registro = this.codigoRegistro.nativeElement.innerText;
-        this.uploadService.actualizar(this.loteMedicion).subscribe(
-          response => {
-            if (response.status == "error") {
-              Swal.fire({
-                icon: "error",
-                title: response.message["code"],
-                text: response.message["sqlMessage"]
-              });
-            } else {
-              //Si no hay error
-              this.form.reset();
-              this.inputBuscar.nativeElement.value = "";
-              this.inputBuscar.nativeElement.focus();
-              this.loteMedicion.ensayo_presion = "";
-              this.loteMedicion.estado = "";
-              Swal.fire({
-                icon: "success",
-                title: "Hecho",
-                text:
-                  "el almacenamiento de los datos se realizo satisfactoriamente"
-              });
-            }
-          },
-          error => {
+  guardarCodePrescinto(value: string) {
+    //identificamos si el usuario ya ingreso el codigo prescinto
+    if (value.length > 7 && value.length < 9) {
+      this.loteMedicion.codigo_prescinto = value;
+      console.log(value);
+      this.uploadService.actualizar(this.loteMedicion).subscribe(
+        response => {
+          if (response.status == "error") {
             Swal.fire({
               icon: "error",
-              title: error.status,
-              text: error.message
+              title: response.message["code"],
+              text: response.message["sqlMessage"]
+            });
+          } else {
+            this.form.reset();
+            this.inputFind = "";
+            this.inputBuscar.nativeElement.focus();
+            this.loteMedicion.ensayo_presion = "";
+            this.loteMedicion.estado = "";
+            Swal.fire({
+              icon: "success",
+              title: "Hecho",
+              text:
+                "el almacenamiento de los datos se realizo satisfactoriamente"
             });
           }
-        );
-      } else {
+        },
+        error => {
+          Swal.fire({
+            icon: "error",
+            title: error.status,
+            text: error.message
+          });
+        }
+      );
+    } else {
+      if (value.length > 8) {
+        this.loteMedicion.codigo_prescinto = "";
         Swal.fire({
-          icon: "error",
-          title: "Codigo no permitido",
-          text: "La longitud del codigo tiene que estar entre 1 a 8 digitos"
+          icon: "info",
+          title: "Codigo muy largo",
+          text: "El codigo de prescinto no debe ser mayor a 8 digitos"
         });
       }
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Orden de ingreso de datos",
-        text: "Primero tiene que ingresar el codigo del medidor"
-      });
     }
   }
 }

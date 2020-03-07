@@ -64,13 +64,14 @@ ctrl.buscar = async (req, res) => {
   const search = req.params.search;
   const field = req.params.field;
   await dbMySQL.query(
-    "SELECT * FROM detalle_verificacion_medidores WHERE  ?? = ?",
+    "SELECT * FROM detalle_verificacion_medidores WHERE ?? = ?",
     [field, search],
     (err, medicion) => {
       if (err) {
         res.json({ status: "error", message: err });
+      } else {
+        res.json({ status: "ok", medicion });
       }
-      res.json({ status: "ok", medicion });
     }
   );
 };

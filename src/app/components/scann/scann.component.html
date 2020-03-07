@@ -14,10 +14,11 @@
               type="input"
               class="form-control codigoMedidor"
               placeholder="Ingrese codigo del medidor a buscar para ingreso de codigo prescinto"
-              #inputBuscar
               autocomplete="false"
-              (change)="buscar($event)"
-              (paste)="buscar($event)"
+              name="codigo"
+              [(ngModel)]="inputFind"
+              #inputBuscar
+              (ngModelChange)="buscar($event)"
             />
           </div>
 
@@ -37,7 +38,7 @@
               [(ngModel)]="loteMedicion.codigo_prescinto"
               #inputCodigoPrescinto
               autocomplete="false"
-              (paste)="guardarCodePrescinto($event)"
+              (ngModelChange)="guardarCodePrescinto($event)"
             />
           </div>
           <div class="form-group">
