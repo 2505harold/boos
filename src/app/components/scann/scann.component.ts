@@ -72,7 +72,6 @@ export class ScannComponent implements OnInit {
             //verificamos si el valor devuelto contiene mediciones
             if (response.medicion.length > 0) {
               //verificamos si existe codigo medicion
-              console.log(response);
               if (!response.medicion[0].codigo_prescinto) {
                 this.loteMedicion = response.medicion[0];
                 this.loteMedicion.fecha_ejecucion = this.datePipe.transform(
@@ -130,38 +129,60 @@ export class ScannComponent implements OnInit {
   guardarCodePrescinto(value: string) {
     //identificamos si el usuario ya ingreso el codigo prescinto
     if (value.length > 7 && value.length < 9) {
-      this.loteMedicion.codigo_prescinto = value;
-      console.log(value);
-      this.uploadService.actualizar(this.loteMedicion).subscribe(
-        response => {
-          if (response.status == "error") {
-            Swal.fire({
-              icon: "error",
-              title: response.message["code"],
-              text: response.message["sqlMessage"]
-            });
-          } else {
-            this.form.reset();
-            this.inputFind = "";
-            this.inputBuscar.nativeElement.focus();
-            this.loteMedicion.ensayo_presion = "";
-            this.loteMedicion.estado = "";
-            Swal.fire({
-              icon: "success",
-              title: "Hecho",
-              text:
-                "el almacenamiento de los datos se realizo satisfactoriamente"
-            });
+      this.uploadService
+        .buscar(value, "codigo_prescinto")
+        .subscribe(response => {
+          //validamos si el codigo de prescinto ya fue utilizado
+          if (response.status == "ok") {
+            // si nos devuelve un lote vacio  quier decir que el codigo no fue utilizado aun
+            if (response.medicion.length == 0) {
+              this.loteMedicion.codigo_prescinto = value;
+              this.uploadService.actualizar(this.loteMedicion).subscribe(
+                response => {
+                  if (response.status == "error") {
+                    Swal.fire({
+                      icon: "error",
+                      title: response.message["code"],
+                      text: response.message["sqlMessage"]
+                    });
+                  } else {
+                    this.form.reset();
+                    this.inputFind = "";
+                    this.inputBuscar.nativeElement.focus();
+                    this.loteMedicion.ensayo_presion = "";
+                    this.loteMedicion.estado = "";
+                    Swal.fire({
+                      icon: "success",
+                      title: "Hecho",
+                      showConfirmButton: false,
+                      timer: 1500,
+                      text:
+                        "el almacenamiento de los datos se realizo satisfactoriamente"
+                    });
+                  }
+                },
+                error => {
+                  Swal.fire({
+                    icon: "error",
+                    title: error.status,
+                    text: error.message
+                  });
+                }
+              );
+            } else {
+              //existe un lote de medicion con el codigo de prescinto ya ingresado
+              this.loteMedicion.codigo_prescinto = "";
+              Swal.fire({
+                icon: "info",
+                title: "Codigo repetido",
+                showConfirmButton: false,
+                timer: 1500,
+                text:
+                  "codigo de prescinto no puede ser utilizado por segunda vez"
+              });
+            }
           }
-        },
-        error => {
-          Swal.fire({
-            icon: "error",
-            title: error.status,
-            text: error.message
-          });
-        }
-      );
+        });
     } else {
       if (value.length > 8) {
         this.loteMedicion.codigo_prescinto = "";
