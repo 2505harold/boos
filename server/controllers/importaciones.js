@@ -30,6 +30,29 @@ ctrl.buscar = async (req, res) => {
   );
 };
 
+ctrl.eliminar = async (req, res) => {
+  const name = req.params.name;
+  await dbMysql.query(
+    "DELETE FROM detalle_archivos_importados WHERE  nombre = ?",
+    name,
+    (err, nameFileEliminado) => {
+      if (err) {
+        res.json({ status: "error", message: err });
+      }
+      dbMysql.query(
+        "DELETE FROM detalle_verificacion_medidores WHERE nombre_file = ?",
+        name,
+        (err, medidorEliminado) => {
+          if (err) {
+            res.json({ status: "error", message: err });
+          }
+          res.json({ status: "ok", datos: medidorEliminado });
+        }
+      );
+    }
+  );
+};
+
 ctrl.obtenerTabla = async (req, res) => {
   await dbMysql.query(
     "select t1.*, t2.* from detalle_archivos_importados t1 " +

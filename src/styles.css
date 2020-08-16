@@ -1,4 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700");
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
 
 html,
 body {
@@ -7,6 +8,140 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.hide {
+  display: none;
+}
+
+h6 {
+  font-size: 0.9rem;
+}
+
+.card-body .avatar {
+  width: 120px;
+  margin-top: -60px;
+  overflow: hidden;
+  border: 5px solid #fff;
+  border-radius: 50%;
+}
+
+.card-up {
+  height: 120px;
+  overflow: hidden;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+
+.bg-vite-city {
+  background: #ff5f6d; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #ffc371,
+    #ff5f6d
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #ffc371,
+    #ff5f6d
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.bg-blue-to-pink {
+  background: #ff00cc; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to left,
+    #333399,
+    #ff00cc
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to left,
+    #333399,
+    #ff00cc
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.bg-pink-to-blue {
+  background: #ff00cc; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #333399,
+    #ff00cc
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #333399,
+    #ff00cc
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+/*-- =====================================================
+ ANGULAR MATERIAL - Table
+ ========================================================*/
+
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+td.mat-cell,
+td.mat-footer-cell,
+th.mat-header-cell {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+}
+
+@media screen and (max-width: 500px) {
+  .mat-table {
+    border: 0;
+    vertical-align: middle;
+  }
+
+  .mat-table .mat-row:nth-child(even) {
+    background: #f8f9fa;
+  }
+  .mat-table .mat-row:nth-child(odd) {
+    background: #fff;
+  }
+
+  .mat-table caption {
+    font-size: 1em;
+  }
+  .mat-table .mat-cell {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    text-align: right;
+    height: 30px;
+    margin-bottom: 2%;
+    display: flex !important;
+    justify-content: space-between !important;
+  }
+
+  .mat-table .mat-header-row {
+    display: none;
+  }
+  .mat-table .mat-cell:before {
+    content: attr(data-label);
+    float: left;
+    text-transform: uppercase;
+    font-weight: normal;
+
+    font-size: 0.85em;
+  }
+  .mat-table .mat-cell:last-child {
+    border-bottom: 0;
+  }
+  .mat-table .mat-cell:first-child {
+    margin-top: 2%;
+  }
+
+  .mat-table .mat-cell {
+    padding: 0px 5px;
+  }
+
+  .mat-table .mat-row .mat-cell:last-child {
+    padding-bottom: 3rem;
+  }
 }
 
 @media (max-width: 1200px) {

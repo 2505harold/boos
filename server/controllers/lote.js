@@ -17,7 +17,7 @@ ctrl.upload = async (req, res) => {
     "Fecha de ejecución",
     "N° Certificado",
     "Estado",
-    "nombre file"
+    "nombre file",
   ];
   let key_new = [
     "item",
@@ -33,10 +33,10 @@ ctrl.upload = async (req, res) => {
     "fecha_ejecucion",
     "certificado",
     "estado",
-    "nombre_file"
+    "nombre_file",
   ];
 
-  data.forEach(element => {
+  data.forEach((element) => {
     for (var i = 0; i < key_new.length; i++) {
       element[key_new[i]] = element[key_old[i]];
       delete element[key_old[i]];
@@ -44,7 +44,7 @@ ctrl.upload = async (req, res) => {
   });
 
   let keys = Object.keys(data[0]);
-  let values = data.map(obj => keys.map(key => obj[key]));
+  let values = data.map((obj) => keys.map((key) => obj[key]));
 
   await dbMySQL.query(
     "INSERT INTO detalle_verificacion_medidores (" +

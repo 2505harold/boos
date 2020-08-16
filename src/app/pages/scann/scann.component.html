@@ -1,0 +1,62 @@
+<app-slide [titulo]="tituloSlide" [subtitulo]="subtituloSlide"></app-slide>
+<br />
+<section class="container">
+  <form class="row" #form="ngForm">
+    <div class="col-12 col-sm-6 my-2">
+      <div class="card">
+        <div class="card-up bg-vite-city"></div>
+        <div class="card-body">
+          <div class="avatar mx-auto bg-white">
+            <img
+              src="./assets/image/medidor2.jpg"
+              class="rounded-circle img-fluid"
+              alt=""
+            />
+          </div>
+          <h5 class="text-center">Codigo Medidor</h5>
+          <hr />
+          <div class="form-group">
+            <input
+              type="input"
+              class="form-control codigoMedidor"
+              placeholder="Ingrese valor"
+              autocomplete="false"
+              name="codigo"
+              [(ngModel)]="inputFind"
+              #inputBuscar
+              (ngModelChange)="buscar($event)"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 my-2">
+      <div class="card">
+        <div class="card-up bg-vite-city"></div>
+        <div class="card-body">
+          <div class="avatar mx-auto">
+            <img
+              src="./assets/image/perscinto2.jpg"
+              class="rounded-circle img-fluid"
+              alt=""
+            />
+          </div>
+          <h5 class="text-center">Codigo Prescinto</h5>
+          <hr />
+          <div class="form-group">
+            <input
+              type="input"
+              class="form-control codigoPrescinto"
+              name="codigoPrescinto"
+              placeholder="Ingrese valor"
+              [(ngModel)]="loteMedicion.codigo_prescinto"
+              #inputCodigoPrescinto
+              autocomplete="false"
+              (ngModelChange)="guardarCodePrescinto($event)"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>

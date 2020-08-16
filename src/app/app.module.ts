@@ -5,62 +5,35 @@ import { FormsModule } from "@angular/forms";
 
 //componentes
 import { AppComponent } from "./app.component";
-import { UploadComponent } from "./components/upload/upload.component";
-import { HeaderComponent } from "./components/header/header.component";
-import { WelcomeComponent } from "./components/welcome/welcome.component";
-import { AppRoutingModule } from "./app-routing.module";
-import { SlideComponent } from "./components/slide/slide.component";
-import { ScannComponent } from "./components/scann/scann.component";
-import { DetallesPrescintoComponent } from "./components/detalles-prescinto/detalles-prescinto.component";
-//service users
-import { ImportacionesService } from "./services/importaciones.service";
-import { RegistrocodigoService } from "./services/registrocodigo.service";
-import { UploadService } from "./services/upload.service";
-import { ExcelService } from "./services/excel.service";
-import { EstadoLoteService } from "./services/estado-lote.service";
+import { LoginComponent } from "./login/login.component";
 
 //import HHTP Cliente para enviar datos al servidor
 import { HttpClientModule } from "@angular/common/http";
 //Angular MAterial
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import {
-  MatTableModule,
-  MatPaginatorModule,
-  MatIconModule
-} from "@angular/material";
 
-import { DatePipe, DecimalPipe } from "@angular/common";
+//modulos
+import { MaterialModule } from "./material/material.module";
+import { ServicesModule } from "./services/services.module";
+import { PagesModule } from "./pages/pages.module";
+
+//rutas
+import { APP_ROUTES } from "./app.routes";
+import { ModalLoginComponent } from "./login/modal-login.component";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    UploadComponent,
-    HeaderComponent,
-    WelcomeComponent,
-    SlideComponent,
-    ScannComponent,
-    DetallesPrescintoComponent
-  ],
+  declarations: [AppComponent, LoginComponent, ModalLoginComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule,
-    MatTableModule,
-    MatPaginatorModule,
     HttpClientModule,
-    MatIconModule
+    MaterialModule,
+    ServicesModule,
+    PagesModule,
+    APP_ROUTES,
   ],
-  providers: [
-    UploadService,
-    DatePipe,
-    DecimalPipe,
-    RegistrocodigoService,
-    ImportacionesService,
-    ExcelService,
-    EstadoLoteService,
-    MatIconModule
-  ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ModalLoginComponent],
 })
 export class AppModule {}

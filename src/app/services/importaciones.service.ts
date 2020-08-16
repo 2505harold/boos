@@ -21,6 +21,11 @@ export class ImportacionesService {
       Global.URLserverNode + "/buscar/importacion/" + valor + "/" + campo
     );
   }
+  eliminar(name): Observable<any> {
+    return this.http.delete(
+      Global.URLserverNode + "/eliminar/importacion/" + name
+    );
+  }
 
   lista(): Observable<any> {
     return this.http.get(Global.URLserverNode + "/obtener/importaciones");
