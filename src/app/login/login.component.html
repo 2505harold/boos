@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
-    <a class="navbar-brand" href="#">eControl</a>
+    <img src="./assets/image/logo_name_right.png" class="logo" alt="" />
     <button
       class="navbar-toggler"
       type="button"
@@ -15,7 +15,9 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link" (click)="login()">Login</a>
+          <a class="nav-link" href="javascript:void(0)" (click)="login()"
+            ><mat-icon>login</mat-icon> Login</a
+          >
         </li>
       </ul>
     </div>
@@ -25,10 +27,12 @@
 <section class="slide-principal">
   <div class="titulo">
     <div class="container text-white pt-3">
-      <h1 class="title-principal">Bienvenido</h1>
+      <h1 class="title-principal">
+        Bienvenido a <span class="text-precinter">PRECINTER</span>
+      </h1>
       <h5 class="font-weight-lighter subtitule-principal">
-        Este aplicativo le permitirá controlar la disponibilidad de equipos y
-        materiales disponibles en su almacén.
+        Un aplicativo en la cual le permitira registrar de forma rapida y
+        automatizada codigos de barras, permitiendole aumentar su produccion.
       </h5>
     </div>
   </div>
